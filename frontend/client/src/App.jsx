@@ -7,6 +7,8 @@ export default function App() {
     { id: 1, sender: "bot", text: "Speak." }
   ]);
   const [input, setInput] = useState("");
+  const [userName, setUserName] = useState("");
+  const [isNameSet, setIsNameSet] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -20,15 +22,29 @@ export default function App() {
     inputRef.current?.focus();
   }, []);
 
+  const handleNameSubmit = (e) => {
+    e.preventDefault();
+    if (!userName.trim()) return;
+    setIsNameSet(true);
+    inputRef.current?.focus();
+  };
+
+const displayName = userName.trim() || "Citizen";
+
   const handleSend = (e) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isTyping) return;
+
+    if (!isNameSet && userName.trim()) {
+      setIsNameSet(true);
+    }
 
     // User message
     const userMessage = { id: Date.now(), sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     
     const currentInput = input;
+    const currentSpeaker = displayName;
     setInput("");
     setIsTyping(true);
 
@@ -37,7 +53,7 @@ export default function App() {
       const botMessage = { 
         id: Date.now() + 1, 
         sender: "bot", 
-        text: `The Emperor acknowledges: "${currentInput}"` 
+        text: `The Emperor acknowledges: "${currentInput}", ${currentSpeaker}.` 
       };
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
@@ -49,6 +65,7 @@ export default function App() {
     inputRef.current?.focus();
   };
 
+//reset chat logs
   return (
     <div className="chat-container">
       <header className="chat-header">
@@ -56,23 +73,50 @@ export default function App() {
         <button onClick={handleClear} className="clear-btn" title="Reset Chat">Reset</button>
       </header>
 
+      {!isNameSet ? (
+        <form onSubmit={handleNameSubmit} className="name-bar">
+          <input
+            type="text"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="State your name, Citizen..."
+            maxLength={24}
+          />
+          <button type="submit">Declare</button>
+        </form>
+      ) : (
+        <div className="name-status">
+          <span>Speaking as: <strong>{displayName}</strong></span>
+          <button onClick={() => setIsNameSet(false)} className="edit-name-btn">
+            Change
+          </button>
+        </div>
+      )}
+
       <div className="chat-window">
         {messages.map((msg) => (
           <div key={msg.id} className={`message-row ${msg.sender}`}>
-            <div className="message-bubble">
-              {msg.text}
+            <div className="message-group">
+              <span className="sender-tag">
+                {msg.sender === "bot" ? "Emperor Norton I" : displayName}
+              </span>
+              <div className="message-bubble">
+                {msg.text}
+              </div>
             </div>
           </div>
         ))}
         {/* '...' as norton types */}
         {isTyping && (
           <div className="message-row bot">
-            <div className="message-bubble typing-bubble">
-              <span>.</span><span>.</span><span>.</span>
+            <div className="message-group">
+              <span className="sender-tag">Emperor Norton I</span>
+              <div className="message-bubble typing-bubble">
+                <span>.</span><span>.</span><span>.</span>
+              </div>
             </div>
           </div>
         )}
-
 
         <div ref={messagesEndRef} />
       </div>
@@ -84,11 +128,13 @@ export default function App() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Speak to Norton..."
+          disabled={isTyping}
         />
-        <button type="submit">Send</button>
+        <button type="submit" disabled={isTyping}>Send</button>
       </form>
     </div>
   );
 }
+
 
 
