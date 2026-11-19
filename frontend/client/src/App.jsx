@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
+import Avatar from "./components/Profile_pic.jsx";
+import profilePic from "./assets/Norton_profile_pic.jpg";
+
 
 export default function App() {
   // Contains the history of the convo as an array of msg objects
@@ -10,8 +13,6 @@ export default function App() {
   const [userName, setUserName] = useState("");
   const [isNameSet, setIsNameSet] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [nortonDollars, setNortonDollars] = useState(0);
-  const [imperialFavour, setImperialFavour] = useState(50); //currently, i've just set it to 50 until we have the backend working
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -33,13 +34,6 @@ export default function App() {
 
 const displayName = userName.trim() || "Citizen";
 
-  const getEmperorMood = () => {
-    if (imperialFavour >= 80) return "Delighted";
-    if (imperialFavour >= 50) return "Pleased";
-    if (imperialFavour >= 25) return "Indifferent";
-    return "Displeased";
-  };
-
   const handleSend = (e) => {
     e.preventDefault();
     if (!input.trim() || isTyping) return;
@@ -51,7 +45,6 @@ const displayName = userName.trim() || "Citizen";
     // User message
     const userMessage = { id: Date.now(), sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
-    setNortonDollars((prev) => prev + 10);
     
     const currentInput = input;
     const currentSpeaker = displayName;
@@ -72,39 +65,22 @@ const displayName = userName.trim() || "Citizen";
 
   const handleClear = () => {
     setMessages([{ id: Date.now(), sender: "bot", text: "Speak."}]);
-    setNortonDollars(0);
-    setImperialFavour(50);
     inputRef.current?.focus();
   };
 
 //reset chat logs
   return (
+    <>
+    <div className="Profile_corner">
+       {/* Profile picture for Emperor Norton */}
+      <Avatar src={profilePic}/>
+    </div>
+
     <div className="chat-container">
       <header className="chat-header">
         <h1>Speak to Emperor Norton</h1>
         <button onClick={handleClear} className="clear-btn" title="Reset Chat">Reset</button>
       </header>
-
-    <div className="stats-bar">
-      {/* points display */}
-      <div className="dollars-display">
-        <strong>Norton Dollars:</strong> ${nortonDollars}
-      </div>
-
-      <div className="favour-display">
-        <span>
-          <strong>Imperial Favour:</strong> {getEmperorMood()} ({imperialFavour}%)
-        </span>
-        {/* outline of the bar */}
-        <div className="favour-bar-track">
-          {/* interior of the bar */}
-          <div
-            className="favour-bar-fill"
-            style={{ width: `${imperialFavour}%` }}
-            />
-        </div>
-      </div>
-    </div>
 
       {!isNameSet ? (
         <form onSubmit={handleNameSubmit} className="name-bar">
@@ -126,7 +102,6 @@ const displayName = userName.trim() || "Citizen";
         </div>
       )}
 
-      {/* Main chat area */}
       <div className="chat-window">
         {messages.map((msg) => (
           <div key={msg.id} className={`message-row ${msg.sender}`}>
@@ -155,7 +130,6 @@ const displayName = userName.trim() || "Citizen";
         <div ref={messagesEndRef} />
       </div>
 
-      {/* bottom text input and the send button (disabled when the bot is typing) */}
       <form onSubmit={handleSend} className="input-area">
         <input
           ref={inputRef}
@@ -168,6 +142,7 @@ const displayName = userName.trim() || "Citizen";
         <button type="submit" disabled={isTyping}>Send</button>
       </form>
     </div>
+    </>
   );
 }
 
