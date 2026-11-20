@@ -2,7 +2,7 @@
 import {useState} from "react";
 import "../App.css";
 
-export default function Avatar ({src=profilePic, alt="Emperor Norton", size=200}) {
+export default function Avatar ({src=profilePic, alt="Emperor Norton", size=150}) {
     // SetFailed is false by default
     const [failed, setFailed] = useState(false);
     const showImage = src && !failed;

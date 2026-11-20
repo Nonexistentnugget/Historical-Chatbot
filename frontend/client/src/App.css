@@ -11,21 +11,24 @@ input {
 
 .main_container {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .chat-container {
   position: relative;
   display: flex;
   flex-direction: column;
-  width:100%;
-  max-width: 460px;
+  /* this way, it scales proportionally to viewport while keeping a balanced shape */
+  width: clamp(320px, 55vw, 820px);
+  height: 85dvh;
+  max-height: 900px;
   box-sizing: border-box;
-  height: min(550px, calc(100dvh - 70px));
-  margin: 35px auto;
   border: 4px double #5c4934;
   border-radius: 2px;
   box-shadow: 0 12px 28px rgba(36, 24, 14, 0.35);
@@ -184,6 +187,8 @@ input {
 
 .message-row {
   display: flex;
+  align-items: flex-end; /* align pfp/avatar with the bottom of the bubble */
+  gap: 10px;
   width: 100%;
 }
 
@@ -195,11 +200,19 @@ input {
   justify-content: flex-start;
 }
 
+/* The Profile Picture that renders with each msg */
+.msg-avatar .avatar {
+  --avatar-size: 20px;
+  border: 1.5px solid #c59b27;
+  box-shadow: 0 2px 6px rgba(36, 24, 14, 0.25);
+}
+
 .message-group {
   display: flex;
   flex-direction: column;
-  max-width: 78%;
+  max-width: 75%;
 }
+
 
 .message-row.user .message-group {
   align-items: flex-end;
@@ -367,10 +380,8 @@ input {
 }
 
 .profile_corner {
-  position: relative;
-  display: flex;
-  top: 36px;
-  left: 100px;
+  align-self: flex-start;
+  margin-top: calc((100dvh - 85dvh) / 2 - 20px);
   z-index: 10;
   padding: 6px;
   background-color: #efe4c8;
@@ -382,5 +393,4 @@ input {
   border: 2px solid #c59b27;
   display: block;
 }
-
 

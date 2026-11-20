@@ -3,7 +3,6 @@ import "./App.css";
 import Avatar from "./components/Profile_pic.jsx";
 import profilePic from "./assets/Norton_profile_pic.jpg";
 
-
 export default function App() {
   // Contains the history of the convo as an array of msg objects
   const [messages, setMessages] = useState([
@@ -14,7 +13,7 @@ export default function App() {
   const [isNameSet, setIsNameSet] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [nortonDollars, setNortonDollars] = useState(0);
-  const [imperialFavour, setImperialFavour] = useState(50); //currently, i've just set it to 50 until we have the backend working
+  const [imperialFavour, setImperialFavour] = useState(50); // currently, i've just set it to 50 by default
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -34,50 +33,48 @@ export default function App() {
     inputRef.current?.focus();
   };
 
-const displayName = userName.trim() || "Citizen";
+  const displayName = userName.trim() || "Citizen";
 
-const getEmperorMood = () => {
+  const getEmperorMood = () => {
     if (imperialFavour >= 80) return "Delighted";
     if (imperialFavour >= 50) return "Pleased";
     if (imperialFavour >= 25) return "Indifferent";
     return "Displeased";
   };
 
-    // Placeholder bot response (to be replaced by the actual logic)
-    const handleSend = async(e) => {
-      e.preventDefault();
+  const handleSend = async (e) => {
+    e.preventDefault();
 
-      if(!input.trim() || isTyping) return;
+    if (!input.trim() || isTyping) return;
 
-      if (!isNameSet && userName.trim()){
-        setIsNameSet(true);
-      }
+    if (!isNameSet && userName.trim()) {
+      setIsNameSet(true);
+    }
 
-      const currentInput = input;
-      const currentSpeaker =displayName;
+    const currentInput = input;
+    const currentSpeaker = displayName;
 
-      const userMessage = {
-        ID: Date.now(),
-        sender: "user",
-        text: currentInput
-      };
+    const userMessage = {
+      id: Date.now(),
+      sender: "user",
+      text: currentInput
+    };
 
-      setMessages((prev)=>[...prev,userMessage]);
-      setNortonDollars((prev) => prev + 10);
+    setMessages((prev) => [...prev, userMessage]);
+    setNortonDollars((prev) => prev + 10);
 
-      setInput("");
-      setIsTyping(true);
+    setInput("");
+    setIsTyping(true);
 
-      try{
-        const response = await fetch("http://localhost:5000/api/chat",
-      {
+    try {
+      const response = await fetch("http://localhost:5000/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          message:currentInput,
-          userName:currentSpeaker,
+          message: currentInput,
+          userName: currentSpeaker,
           imperialFavour: imperialFavour
         })
       });
@@ -89,10 +86,10 @@ const getEmperorMood = () => {
       const data = await response.json();
 
       // display the actual backend response
-      setMessages((prev)=> [
+      setMessages((prev) => [
         ...prev,
         {
-          id:Date.now() + 1,
+          id: Date.now() + 1,
           sender: "bot",
           text: data.reply
         }
@@ -102,65 +99,59 @@ const getEmperorMood = () => {
       if (data.imperialFavour !== undefined) {
         setImperialFavour(data.imperialFavour);
       }
-
-      } catch (error) {
-        console.error("Chat error:", error);
+    } catch (error) {
+      console.error("Chat error:", error);
 
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           sender: "bot",
-          text: "I encounter an error, try again"
+          text: "I beg your pardon? try again" // if you're seeing this, it's likely you're forgetting to start the backend
         }
       ]);
-
     } finally {
       setIsTyping(false);
     }
   };
 
   const handleClear = () => {
-    setMessages([{ id: Date.now(), sender: "bot", text: "Speak."}]);
+    setMessages([{ id: Date.now(), sender: "bot", text: "Speak." }]);
     setNortonDollars(0);
     setImperialFavour(50);
     inputRef.current?.focus();
   };
 
-//reset chat logs
   return (
     <div className="main_container">
-      <div className="profile_corner">
-        {/* Profile picture for Emperor Norton */}
-        <Avatar src={profilePic}/>
-      </div>
-
       <div className="chat-container">
         <header className="chat-header">
           <h1>Speak to Emperor Norton</h1>
-          <button onClick={handleClear} className="clear-btn" title="Reset Chat">Reset</button>
+          <button onClick={handleClear} className="clear-btn" title="Reset Chat">
+            Reset
+          </button>
         </header>
 
-      <div className="stats-bar">
-        {/* points display */}
-        <div className="dollars-display">
-          <strong>Norton Dollars:</strong> ${nortonDollars}
-        </div>
+        <div className="stats-bar">
+          {/* points display */}
+          <div className="dollars-display">
+            <strong>Norton Dollars:</strong> ${nortonDollars}
+          </div>
 
-        <div className="favour-display">
-          <span>
-            <strong>Imperial Favour:</strong> {getEmperorMood()} ({imperialFavour}%)
-          </span>
-          {/* outline of the bar */}
-          <div className="favour-bar-track">
-            {/* interior of the bar */}
-            <div
-              className="favour-bar-fill"
-              style={{ width: `${imperialFavour}%` }}
+          <div className="favour-display">
+            <span>
+              <strong>Imperial Favour:</strong> {getEmperorMood()} ({imperialFavour}%)
+            </span>
+            {/* outline of the bar */}
+            <div className="favour-bar-track">
+              {/* interior of the bar */}
+              <div
+                className="favour-bar-fill"
+                style={{ width: `${imperialFavour}%` }}
               />
+            </div>
           </div>
         </div>
-      </div>
 
         {!isNameSet ? (
           <form onSubmit={handleNameSubmit} className="name-bar">
@@ -175,7 +166,9 @@ const getEmperorMood = () => {
           </form>
         ) : (
           <div className="name-status">
-            <span>Speaking as: <strong>{displayName}</strong></span>
+            <span>
+              Speaking as: <strong>{displayName}</strong>
+            </span>
             <button onClick={() => setIsNameSet(false)} className="edit-name-btn">
               Change
             </button>
@@ -186,23 +179,33 @@ const getEmperorMood = () => {
         <div className="chat-window">
           {messages.map((msg) => (
             <div key={msg.id} className={`message-row ${msg.sender}`}>
+            {/* rendering Norton's profile picture beside each bot message, for that messaging app aesthetic */}
+              {msg.sender === "bot" && (
+                <div className="msg-avatar">
+                  <Avatar src={profilePic} />
+                </div>
+              )}
               <div className="message-group">
                 <span className="sender-tag">
                   {msg.sender === "bot" ? "Emperor Norton I" : displayName}
                 </span>
-                <div className="message-bubble">
-                  {msg.text}
-                </div>
+                <div className="message-bubble">{msg.text}</div>
               </div>
             </div>
           ))}
+
           {/* '...' as norton types */}
           {isTyping && (
             <div className="message-row bot">
+              <div className="msg-avatar">
+                <Avatar src={profilePic} />
+              </div>
               <div className="message-group">
                 <span className="sender-tag">Emperor Norton I</span>
                 <div className="message-bubble typing-bubble">
-                  <span>.</span><span>.</span><span>.</span>
+                  <span>.</span>
+                  <span>.</span>
+                  <span>.</span>
                 </div>
               </div>
             </div>
@@ -221,7 +224,9 @@ const getEmperorMood = () => {
             placeholder="Speak to Norton..."
             disabled={isTyping}
           />
-          <button type="submit" disabled={isTyping}>Send</button>
+          <button type="submit" disabled={isTyping}>
+            Send
+          </button>
         </form>
       </div>
     </div>

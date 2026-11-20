@@ -32,7 +32,7 @@ if (match) {
     });
 }
 
-// TODO:  (ashe or david)
+// TODO: 
 //Connect an AI API here for unscripted questions
 res.json({
     reply: `The Emperor is...UNSURE of what to say in response to, as you put it: "${message}", ${userName || 'Citizen'}. Try asking about something else...Something about me perhaps?`,
