@@ -20,19 +20,25 @@ Despite having no formal political power, he became a celebrated local figure in
 ### Prerequisites
 Make sure you have **Node.js** and **npm** installed on your machine.
 
-### Installation & Running the Frontend
-1. **Clone the repository**
+### Installation & Running the App
 
-   
-2. **Install dependencies:**
+1. **Clone the repository:**
+
+2. **Install backend dependencies and start the Express server:**
    ```bash
    npm install
+   node server.js
    ```
+   The server should now be running at `http://localhost:5000`.
 
-3. **Start the local development server:**
+3. **Install frontend dependencies and start the development server:**
+   Open a **new terminal**, navigate to the frontend folder, and run:
    ```bash
+   cd frontend/client
+   npm install
    npm run dev
    ```
 
 4. **Open in your browser:**
-   Click on and visit the local URL shown in your terminal (`http://localhost:5173`).
+   Click on or visit the local URL shown in your terminal (`http://localhost:5173`).
+
