@@ -7,8 +7,10 @@ body {
 .chat-container {
   display: flex;
   flex-direction: column;
-  width: 460px;
-  height: 550px;
+  width:100%;
+  max-width: 460px;
+  box-sizing: border-box;
+  height: min(550px, calc(100dvh - 70px));
   margin: 35px auto;
   border: 4px double #5c4934;
   border-radius: 2px;
