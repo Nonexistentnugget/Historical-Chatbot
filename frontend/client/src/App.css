@@ -4,7 +4,16 @@ body {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Georgia", serif;
 }
 
+.main_container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .chat-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   width:100%;
@@ -288,6 +297,7 @@ body {
 }
 
 /* Profile picture */
+
 .avatar {
   width: var(--avatar-size, 96px);
   height: var(--avatar-size, 96px);
@@ -315,10 +325,11 @@ body {
   user-select: none;
 }
 
-.Profile_corner {
-  position: fixed;
+.profile_corner {
+  position: relative;
+  display: flex;
   top: 36px;
-  left: 100px;
+  right: 100px;
   z-index: 10;
   padding: 6px;
   background-color: #efe4c8;
