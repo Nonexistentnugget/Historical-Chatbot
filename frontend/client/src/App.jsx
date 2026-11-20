@@ -70,79 +70,79 @@ const displayName = userName.trim() || "Citizen";
 
 //reset chat logs
   return (
-    <>
-    <div className="Profile_corner">
-       {/* Profile picture for Emperor Norton */}
-      <Avatar src={profilePic}/>
-    </div>
+    <div className="main_container">
+      <div className="profile_corner">
+        {/* Profile picture for Emperor Norton */}
+        <Avatar src={profilePic}/>
+      </div>
 
-    <div className="chat-container">
-      <header className="chat-header">
-        <h1>Speak to Emperor Norton</h1>
-        <button onClick={handleClear} className="clear-btn" title="Reset Chat">Reset</button>
-      </header>
+      <div className="chat-container">
+        <header className="chat-header">
+          <h1>Speak to Emperor Norton</h1>
+          <button onClick={handleClear} className="clear-btn" title="Reset Chat">Reset</button>
+        </header>
 
-      {!isNameSet ? (
-        <form onSubmit={handleNameSubmit} className="name-bar">
-          <input
-            type="text"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder="State your name, Citizen..."
-            maxLength={24}
-          />
-          <button type="submit">Declare</button>
-        </form>
-      ) : (
-        <div className="name-status">
-          <span>Speaking as: <strong>{displayName}</strong></span>
-          <button onClick={() => setIsNameSet(false)} className="edit-name-btn">
-            Change
-          </button>
-        </div>
-      )}
-
-      <div className="chat-window">
-        {messages.map((msg) => (
-          <div key={msg.id} className={`message-row ${msg.sender}`}>
-            <div className="message-group">
-              <span className="sender-tag">
-                {msg.sender === "bot" ? "Emperor Norton I" : displayName}
-              </span>
-              <div className="message-bubble">
-                {msg.text}
-              </div>
-            </div>
-          </div>
-        ))}
-        {/* '...' as norton types */}
-        {isTyping && (
-          <div className="message-row bot">
-            <div className="message-group">
-              <span className="sender-tag">Emperor Norton I</span>
-              <div className="message-bubble typing-bubble">
-                <span>.</span><span>.</span><span>.</span>
-              </div>
-            </div>
+        {!isNameSet ? (
+          <form onSubmit={handleNameSubmit} className="name-bar">
+            <input
+              type="text"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              placeholder="State your name, Citizen..."
+              maxLength={24}
+            />
+            <button type="submit">Declare</button>
+          </form>
+        ) : (
+          <div className="name-status">
+            <span>Speaking as: <strong>{displayName}</strong></span>
+            <button onClick={() => setIsNameSet(false)} className="edit-name-btn">
+              Change
+            </button>
           </div>
         )}
 
-        <div ref={messagesEndRef} />
-      </div>
+        <div className="chat-window">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`message-row ${msg.sender}`}>
+              <div className="message-group">
+                <span className="sender-tag">
+                  {msg.sender === "bot" ? "Emperor Norton I" : displayName}
+                </span>
+                <div className="message-bubble">
+                  {msg.text}
+                </div>
+              </div>
+            </div>
+          ))}
+          {/* '...' as norton types */}
+          {isTyping && (
+            <div className="message-row bot">
+              <div className="message-group">
+                <span className="sender-tag">Emperor Norton I</span>
+                <div className="message-bubble typing-bubble">
+                  <span>.</span><span>.</span><span>.</span>
+                </div>
+              </div>
+            </div>
+          )}
 
-      <form onSubmit={handleSend} className="input-area">
-        <input
-          ref={inputRef}
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Speak to Norton..."
-          disabled={isTyping}
-        />
-        <button type="submit" disabled={isTyping}>Send</button>
-      </form>
+          <div ref={messagesEndRef} />
+        </div>
+
+        <form onSubmit={handleSend} className="input-area">
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Speak to Norton..."
+            disabled={isTyping}
+          />
+          <button type="submit" disabled={isTyping}>Send</button>
+        </form>
+      </div>
     </div>
-    </>
   );
 }
 
