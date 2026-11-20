@@ -16,11 +16,11 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 460px;
-  max-width: calc(100vw - 24px);
+  width:100%;
+  max-width: 460px;
   box-sizing: border-box;
-  height: 550px;
-  margin: 35px 0, 0;
+  height: min(550px, calc(100dvh - 70px));
+  margin: 35px auto;
   border: 4px double #5c4934;
   border-radius: 2px;
   box-shadow: 0 12px 28px rgba(36, 24, 14, 0.35);
