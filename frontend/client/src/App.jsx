@@ -43,34 +43,81 @@ const getEmperorMood = () => {
     return "Displeased";
   };
 
-  const handleSend = (e) => {
-    e.preventDefault();
-    if (!input.trim() || isTyping) return;
-
-    if (!isNameSet && userName.trim()) {
-      setIsNameSet(true);
-    }
-
-    // User message
-    const userMessage = { id: Date.now(), sender: "user", text: input };
-    setMessages((prev) => [...prev, userMessage]);
-    setNortonDollars((prev) => prev + 10);
-    
-    const currentInput = input;
-    const currentSpeaker = displayName;
-    setInput("");
-    setIsTyping(true);
-
     // Placeholder bot response (to be replaced by the actual logic)
-    setTimeout(() => {
-      const botMessage = { 
-        id: Date.now() + 1, 
-        sender: "bot", 
-        text: `The Emperor acknowledges: "${currentInput}", ${currentSpeaker}.` 
+    const handleSend = async(e) => {
+      e.preventDefault();
+
+      if(!input.trim() || isTyping) return;
+
+      if (!isNameSet && userName.trim()){
+        setIsNameSet(true);
+      }
+
+      const currentInput = input;
+      const currentSpeaker =displayName;
+
+      const userMessage = {
+        ID: Date.now(),
+        sender: "user",
+        text: currentInput
       };
-      setMessages((prev) => [...prev, botMessage]);
+
+      setMessages((prev)=>[...prev,userMessage]);
+      setNortonDollars((prev) => prev + 10);
+
+      setInput("");
+      setIsTyping(true);
+
+      try{
+        const response = await fetch("http://localhost:5000/api/chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message:currentInput,
+          userName:currentSpeaker,
+          imperialFavour: imperialFavour
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // display the actual backend response
+      setMessages((prev)=> [
+        ...prev,
+        {
+          id:Date.now() + 1,
+          sender: "bot",
+          text: data.reply
+        }
+      ]);
+
+      // update Imperial favour
+      if (data.imperialFavour !== undefined) {
+        setImperialFavour(data.imperialFavour);
+      }
+
+      } catch (error) {
+        console.error("Chat error:", error);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          sender: "bot",
+          text: "I encounter an error, try again"
+        }
+      ]);
+
+    } finally {
       setIsTyping(false);
-    }, 1000); //simulated delay (1000ms) before response
+    }
   };
 
   const handleClear = () => {
@@ -180,6 +227,3 @@ const getEmperorMood = () => {
     </div>
   );
 }
-
-
-
