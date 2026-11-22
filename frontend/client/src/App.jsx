@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./App.css";
 import Avatar from "./components/Profile_pic.jsx";
 import profilePic from "./assets/Norton_profile_pic.jpg";
+import Navbar from "./navbar.jsx";
 
 export default function App() {
   // Contains the history of the convo as an array of msg objects
@@ -125,6 +126,7 @@ export default function App() {
   return (
     <div className="main_container">
       <div className="chat-container">
+        <Navbar />
         <header className="chat-header">
           <h1>Speak to Emperor Norton</h1>
           <button onClick={handleClear} className="clear-btn" title="Reset Chat">
