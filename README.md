@@ -28,6 +28,7 @@ Make sure you have **Node.js** and **npm** installed on your machine.
    ```bash
    npm install
    node server.js
+   npm start
    ```
    The server should now be running at `http://localhost:5000`.
 
